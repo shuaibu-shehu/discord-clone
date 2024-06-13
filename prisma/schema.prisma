@@ -1,0 +1,107 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model profile {
+  id String @id @default(uuid())
+  userId String
+  name String
+  imageUrl String @db.Text
+  email String @db.Text 
+ 
+  servers  server[]
+  members   Member[]
+  channels  Channel[]
+ 
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+
+
+model server {
+  id String @id @default(uuid())
+  name String
+  imageUrl String @db.Text
+  inviteCode String
+
+  profileId String
+  profile profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+
+  members Member[]
+  channels Channel[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([profileId])
+}
+
+
+enum MemberRole{
+  ADMIN
+  MODERATOR
+  GUEST
+}
+
+model Member{
+  id String @id @default(uuid())
+  role MemberRole @default(GUEST)
+  userId String
+
+  profileId String
+  profile profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  
+  serverId String
+  server server @relation(fields: [serverId], references: [id], onDelete: Cascade)
+ 
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([serverId])
+  @@index([profileId])
+
+}
+
+enum ChannelType{
+  TEXT
+  AUDIO
+  VIDEO
+}
+
+model Channel{
+  id String @id @default(uuid())
+  name String
+  type ChannelType @default(TEXT)
+  
+  profileId String
+  profile profile @relation(fields: [profileId], references: [id])
+
+  serverId String
+  server server @relation(fields: [serverId], references: [id], onDelete: Cascade)
+ 
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([serverId])
+}
+// model user {
+//   id String @id @default(uuid())
+//   email String @unique
+//   password String
+//   profile profile?
+//   servers server[]
+//   createdAt DateTime @default(now())
+//   updatedAt DateTime @updatedAt
+// }
