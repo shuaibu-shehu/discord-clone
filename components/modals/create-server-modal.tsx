@@ -1,6 +1,5 @@
 'use client'
 
-import React, { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import axios from 'axios'
@@ -13,19 +12,22 @@ import { Button } from '../ui/button'
 
 import FileUpload from '../file-upload'
 import { useRouter } from 'next/navigation'
+import { useModal } from '@/hooks/use-modal-store'
+
 
 const formSchema = z.object({
     name: z.string().min(1, { message: "Server name is require." }),
     imageUrl: z.string().min(1, { message: "Image URL required." }),
-})
-
-
-function Initialmodal() {
-    const [mounted, setMounted] = React.useState(false)
-
-    const router = useRouter()
+    })
     
-      const form = useForm({
+    
+    function CreateServerModal() {
+        const router = useRouter()
+        const {isOpen, onClose, type} = useModal()
+        
+        const isModalOpen = isOpen && type==="createServer";
+        
+        const form = useForm({
         resolver: zodResolver(formSchema),
         defaultValues: {
             name: '',
@@ -40,27 +42,21 @@ function Initialmodal() {
             await axios.post('/api/servers', values);
             form.reset();
             router.refresh();
-            console.log('reloading');
-            
-            window.location.reload();
-        
+             onClose();
+                    
         } catch (error) {
             console.log('from client ', error);
         }
 
     }
 
-    useEffect(() => {
-        setMounted(true)
-    },[])
-
-
-    if(!mounted){
-        return null
+    const handleClose = () =>{
+        form.reset();
+        onClose();
     }
 
     return (
-        <Dialog open>
+        <Dialog open={isModalOpen} onOpenChange={handleClose}>
             <DialogContent className='bg-white text-black p-0 overflow-hidden'>
                 <DialogHeader className='pt-8 px-6'>
                     <DialogTitle className=' text=2xl text-center font-bold'>
@@ -143,5 +139,5 @@ function Initialmodal() {
     )
 }
 
-export default Initialmodal
+export default CreateServerModal
 

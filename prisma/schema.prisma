@@ -13,14 +13,14 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model profile {
+model Profile {
   id String @id @default(uuid())
   userId String
   name String
   imageUrl String @db.Text
   email String @db.Text 
  
-  servers  server[]
+  servers  Server[]
   members   Member[]
   channels  Channel[]
  
@@ -30,14 +30,14 @@ model profile {
 
 
 
-model server {
+model Server {
   id String @id @default(uuid())
   name String
   imageUrl String @db.Text
-  inviteCode String
+  inviteCode String @unique
 
   profileId String
-  profile profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  profile Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
 
   members Member[]
   channels Channel[]
@@ -58,13 +58,13 @@ enum MemberRole{
 model Member{
   id String @id @default(uuid())
   role MemberRole @default(GUEST)
-  userId String
+
 
   profileId String
-  profile profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  profile Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
   
   serverId String
-  server server @relation(fields: [serverId], references: [id], onDelete: Cascade)
+  server Server @relation(fields: [serverId], references: [id], onDelete: Cascade)
  
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -86,22 +86,14 @@ model Channel{
   type ChannelType @default(TEXT)
   
   profileId String
-  profile profile @relation(fields: [profileId], references: [id])
+  profile Profile @relation(fields: [profileId], references: [id])
 
   serverId String
-  server server @relation(fields: [serverId], references: [id], onDelete: Cascade)
+  server Server @relation(fields: [serverId], references: [id], onDelete: Cascade)
  
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   @@index([serverId])
 }
-// model user {
-//   id String @id @default(uuid())
-//   email String @unique
-//   password String
-//   profile profile?
-//   servers server[]
-//   createdAt DateTime @default(now())
-//   updatedAt DateTime @updatedAt
-// }
+

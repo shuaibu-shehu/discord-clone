@@ -1,9 +1,11 @@
 import React from 'react'
 
-function ServerPage() {
+const ServerPage = async ( { params }: { params: { serverId: string } }) => {
   return (
-    <div>ServerPage</div>
+    <div>page</div>
   )
 }
 
 export default ServerPage
+
+

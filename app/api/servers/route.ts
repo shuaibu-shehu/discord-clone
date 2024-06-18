@@ -34,7 +34,6 @@ export async function POST(req:Request){
                 members : {
                     create : [
                         { 
-                        userId: profile.userId,
                         profileId: profile.id, 
                         role: MemberRole.ADMIN 
                     }
