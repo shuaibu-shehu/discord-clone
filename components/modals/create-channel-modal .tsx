@@ -16,33 +16,44 @@ import { ChannelType } from '@prisma/client'
 import { channel } from 'diagnostics_channel'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select'
 import qs from 'query-string'
+import { useEffect } from 'react'
 
 
 const formSchema = z.object({
     name: z.string().min(1, {
-         message: "channel name is require." 
-        }).refine(
-            name=>name!=='general',
-            {message: 'Channel name cannot be general'}
-        ),
-    type: z.nativeEnum(ChannelType)    
+        message: "channel name is require."
+    }).refine(
+        name => name !== 'general',
+        { message: 'Channel name cannot be general' }
+    ),
+    type: z.nativeEnum(ChannelType)
 })
-    
-    
+
+
 function CreateChannelModal() {
-        const router = useRouter()
-        const params = useParams();
-        const {isOpen, onClose, type} = useModal()
-        
-        const isModalOpen = isOpen && type==="createChannel";
-        
-        const form = useForm({
+    const router = useRouter()
+    const params = useParams();
+    const { isOpen, onClose, type, data } = useModal()
+
+    const { channelType } = data
+
+    const form = useForm({
         resolver: zodResolver(formSchema),
         defaultValues: {
             name: '',
-            type: ChannelType.TEXT
+            type: channelType || ChannelType.TEXT,
         }
     })
+
+    useEffect(() => {
+        if (channelType) {
+            form.setValue('type', channelType)
+        } else {
+            form.setValue('type', ChannelType.TEXT)
+        }
+    }, [channelType, form])
+    const isModalOpen = isOpen && type === "createChannel";
+
 
     const isLoading = form.formState.isSubmitting
 
@@ -51,24 +62,24 @@ function CreateChannelModal() {
             const url = qs.stringifyUrl({
                 url: '/api/channels',
                 query: {
-                     serverId: params.serverId
+                    serverId: params.serverId
                 }
             })
 
             console.log(url);
-            
+
             await axios.post(url, values);
             form.reset();
             router.refresh();
-             onClose();
-                    
+            onClose();
+
         } catch (error) {
             console.log('from client ', error);
         }
 
     }
 
-    const handleClose = () =>{
+    const handleClose = () => {
         form.reset();
         onClose();
     }
@@ -97,20 +108,20 @@ function CreateChannelModal() {
 
                                         </FormLabel>
                                         <FormControl>
-                                            <Input 
-                                            disabled={isLoading}
-                                            className=' bg-zinc-300/50 
+                                            <Input
+                                                disabled={isLoading}
+                                                className=' bg-zinc-300/50 
                                             border-0 
                                             focus-visible:ring-0
                                             text-blank 
                                             focus-visible:ring-offset-0
                                             '
-                                            placeholder='Enter channel name'
-                                            {...field}
+                                                placeholder='Enter channel name'
+                                                {...field}
 
                                             />
                                         </FormControl>
-                                        <FormMessage/>
+                                        <FormMessage />
                                     </FormItem>
                                 )}
                             />
@@ -124,49 +135,49 @@ function CreateChannelModal() {
                                             Channel type
                                         </FormLabel>
                                         <Select
-                                        disabled={isLoading}
-                                        onValueChange={field.onChange}
-                                        defaultValue={field.value}
+                                            disabled={isLoading}
+                                            onValueChange={field.onChange}
+                                            defaultValue={field.value}
                                         >
-                                        <FormControl>
-                                          <SelectTrigger
-                                          className=' bg-zinc-300/50 border-0
+                                            <FormControl>
+                                                <SelectTrigger
+                                                    className=' bg-zinc-300/50 border-0
                                           focus:ring-0 text-black
                                           ring-offset-0 focus:ring-offset-0
                                           capitalize outline-none
                                           '
-                                          >
-                                            <SelectValue
-                                            placeholder='Select a channel type'
-                                            />
-                                          </SelectTrigger>
-                                        </FormControl>
-                                        <SelectContent>
-                                            {Object.values(ChannelType).map((type) => (
-                                                <SelectItem
-                                                key={type}
-                                                value={type}
-                                                className='capitalize'
                                                 >
-                                                    {type.toLowerCase()}
-                                                </SelectItem>
-                                            ))}
-                                        </SelectContent>
+                                                    <SelectValue
+                                                        placeholder='Select a channel type'
+                                                    />
+                                                </SelectTrigger>
+                                            </FormControl>
+                                            <SelectContent>
+                                                {Object.values(ChannelType).map((type) => (
+                                                    <SelectItem
+                                                        key={type}
+                                                        value={type}
+                                                        className='capitalize'
+                                                    >
+                                                        {type.toLowerCase()}
+                                                    </SelectItem>
+                                                ))}
+                                            </SelectContent>
                                         </Select>
-                                        <FormMessage/>
+                                        <FormMessage />
                                     </FormItem>
                                 )}
                             />
                         </div>
                         <DialogFooter
-                        className=' bg-gray-100 px-6 py-4'
+                            className=' bg-gray-100 px-6 py-4'
                         >
-                        <Button
-                        variant={"primary"}
-                        disabled={isLoading}
-                         className=''>
-                                    Create
-                        </Button>
+                            <Button
+                                variant={"primary"}
+                                disabled={isLoading}
+                                className=''>
+                                Create
+                            </Button>
                         </DialogFooter>
 
                     </form>

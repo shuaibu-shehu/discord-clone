@@ -1,7 +1,6 @@
 'use client'
 
 import CreateServerModal from '@/components/modals/create-server-modal'
-import { useModal } from '@/hooks/use-modal-store'
 import React, { useEffect } from 'react'
 import InviteModal from '../modals/invite-modal'
 import EditServerModal from '../modals/edit-server-modal'

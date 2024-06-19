@@ -8,8 +8,8 @@ import dynamic from 'next/dynamic'
 const ActionTooltip = dynamic(() => import("../action-tooltip"), { ssr: false });
 
 export default function NavigationAction() {
-  const {onOpen} = useModal()
-  
+  const {onOpen, data} = useModal()
+  const {server} = data
   return (
     <div>
         <ActionTooltip 
@@ -18,8 +18,8 @@ export default function NavigationAction() {
         label={'Add a server'}
         >
         <button 
-        onClick={()=>onOpen('createServer')}
-        className=' group'
+        onClick={()=>onOpen('createServer',{server})}
+        className='group'
         >
             <div 
             className='
@@ -37,7 +37,6 @@ export default function NavigationAction() {
             </div>
         </button>
     </ActionTooltip>
-
     </div>
   )
 }
