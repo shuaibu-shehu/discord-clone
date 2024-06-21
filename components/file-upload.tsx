@@ -1,5 +1,5 @@
 'use client'
-import { X } from 'lucide-react';
+import { FileIcon, X } from 'lucide-react';
 
 import { UploadDropzone } from '@/lib/uploadthing';
 
@@ -47,6 +47,33 @@ function FileUpload({
                 </button>
             </div>
         )
+    }
+
+    if(value && fileType === 'pdf'){
+        return <div
+        className=' relative flex items-center p-2 mt-2 rounded-md  bg-background/10'
+        >
+            <FileIcon className=' h-10 w-10 fill-indigo-200 stroke-indigo-400'/>
+            <a href={value}
+            target='_blank'
+            rel= "noreferrer noopener"
+            className='ml-2 text-indigo-500
+            dark:text-indigo-400 text-sm
+            hover:underline'
+            >{value}</a>
+             <button 
+                onClick={()=>onChange("")}
+                className='
+                 bg-rose-500 text-white
+                  rounded-full  p-1
+                  absolute -top-2 -right-2 
+                  shadow-sm z-[1000] cursor-pointer
+                '
+                type='button'
+                >
+                    <X  className=' h-4 w-4'/>
+                </button>
+        </div>
     }
 
   return (

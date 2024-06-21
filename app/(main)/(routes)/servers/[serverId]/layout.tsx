@@ -38,7 +38,7 @@ const profile = await currentProfile();
     >
         <div className=' hidden md:flex
          h-full w-60 z-00
-         flex-col fixed inset-y-4
+         flex-col fixed
          '>
             <ServerSidebar serverId={params.serverId}/>
         </div>

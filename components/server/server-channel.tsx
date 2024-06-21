@@ -1,5 +1,6 @@
 'use client'
 
+import { ModalType, useModal } from '@/hooks/use-modal-store';
 import { cn } from '@/lib/utils';
 import { Channel, ChannelType, MemberRole, Server } from '@prisma/client'
 import { Edit, Hash, Lock, Mic, Trash, Video } from 'lucide-react';
@@ -29,11 +30,22 @@ role
 }:ServerChannelProps) {
   const params =useParams();
   const router = useRouter();
+  const {onOpen} = useModal();
   
   const Icon = iconMap[channel.type];
-    return (
+  
+  const onClick = ()=>{
+    router.push(`/servers/${server.id}/channels/${channel.id}`)
+  }
+
+  const onAction = (e:React.MouseEvent, action: ModalType)=>{
+    e.stopPropagation();
+    onOpen(action,{server,channel}) 
+  }
+  
+  return (
     <button
-    onClick={()=>{}}
+    onClick={()=>onClick()}
     className={cn(`group px-2 py-2 rounded-md
          flex items-center w-full gap-x-2
         hover:bg-zinc-700/10
@@ -64,7 +76,9 @@ role
                 <ActionTooltip
                 label='Edit'
                 >
-                <Edit className='hidden group-hover:block w-4 h-4
+                <Edit 
+                onClick={(e)=>onAction(e,'editChannel')}
+                className='hidden group-hover:block w-4 h-4
                  text-zinc-500 hover:text-zinc-600 dark:text-zinc-400
                  transition dark:hover:text-zinc-300
                  ' />
@@ -72,7 +86,9 @@ role
                  <ActionTooltip
                 label='Delete'
                 >
-                <Trash className='hidden group-hover:block w-4 h-4
+                <Trash
+                onClick={(e)=>onAction(e,'deleteChannel')}
+                className='hidden group-hover:block w-4 h-4
                  text-zinc-500 hover:text-zinc-600 dark:text-zinc-400
                  transition dark:hover:text-zinc-300
                  ' />
