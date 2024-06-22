@@ -50,7 +50,7 @@ role
          flex items-center w-full gap-x-2
         hover:bg-zinc-700/10
         dark:hover:bg-zinc-700/50 transition mb-1`,
-            params.channelId === channel.id && 'bg-zinc-700/20 dark:bg-zinc-700',
+            params?.channelId === channel.id && 'bg-zinc-700/20 dark:bg-zinc-700',
         )}
     >
         <Icon 
@@ -64,7 +64,7 @@ role
             group-hover:text-zinc-600 dark:text-zinc-400
             dark:group-hover:text-zinc-300 transition
             `,
-                params.channelId === channel.id && ' text-primary dark:text-zinc-200 dark:gruop-hover:text-white' 
+                params?.channelId === channel.id && ' text-primary dark:text-zinc-200 dark:gruop-hover:text-white' 
             )}
         >
             {channel.name}
