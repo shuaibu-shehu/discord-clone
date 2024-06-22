@@ -42,7 +42,7 @@ export default function UseChatQuery({
         queryFn: fetchMessages,
         getNextPageParam: (lastPage) => lastPage?.nextCursor,
         refetchInterval: isConnected ? false : 1000,  
-        initialPageParam: undefined,  // Added initialPageParam
+        initialPageParam: undefined,  
     });
 
     return {

@@ -2,18 +2,18 @@ import { currentProfilePages } from "@/lib/current-profile-pages";
 import { db } from "@/lib/db";
 import { NextApiResponseServerIo } from "@/types";
 import { NextApiRequest } from "next";
-import { NextResponse } from "next/server";
 
 
 export default async function handler(req:NextApiRequest, res: NextApiResponseServerIo) {
    if(req.method !== "POST") {
-       return res.status(405).json({error: "Hello World"})
+       return res.status(405).json({error: "Invalid Method"})
    }
    try {
     const profile = await currentProfilePages(req);
     const {content, fileUrl } = req.body;
     const  {serverId, channelId} = req.query;
-
+        console.log('creatng message');
+        
     if(!profile) {
         return res.status(401).json({error: "Unauthorized"})
     }

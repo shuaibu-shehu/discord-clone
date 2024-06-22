@@ -1,9 +1,11 @@
 import ChatHeader from '@/components/chat/chat-header';
 import { ChatInput } from '@/components/chat/chat-input';
 import { ChatMessages } from '@/components/chat/chat-messages';
+import { MediaRoom } from '@/components/media-room';
 import { currentProfile } from '@/lib/current-profile';
 import { db } from '@/lib/db';
 import { auth } from '@clerk/nextjs/server';
+import { ChannelType } from '@prisma/client';
 import { redirect } from 'next/navigation';
 import React from 'react'
 
@@ -47,12 +49,14 @@ export default async function ChannelIdPage({
         serverId={channel.serverId}
         type='channel'
         />
-         <ChatMessages
+        {channel.type === ChannelType.TEXT && (
+            <>
+              <ChatMessages
          member={member}
         name={channel.name}
         chatId={channel.id}
         apiUrl={`/api/messages`}
-        socketUrl='/api/socket/messages'
+        socketUrl={`/api/socket/messages`}
         socketQuery={{
             channelId: channel.id,
             serverId: channel.serverId
@@ -70,6 +74,15 @@ export default async function ChannelIdPage({
             serverId: channel.serverId,
         }}
         />
+            </>
+        )}
+       {channel.type === ChannelType.VIDEO && (
+        <MediaRoom
+        chaId={channel.id}
+         video={true}
+        audio={true} 
+        />
+       )}
     </div>
   )
 }
