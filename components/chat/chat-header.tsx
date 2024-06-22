@@ -4,6 +4,7 @@ import MobileToggle from '../mobile-toggle';
 import UserAvatar from '../user-avatar';
 import { SocketIndicator } from '../socket-indicator';
 import ChatVideoButton from './chat-video-button';
+import ChatAudioButton from './chat-audio-button';
 
 interface ChatHeaderProps {
   serverId: string;
@@ -45,6 +46,7 @@ imageUrl
       >
         {type === "conversation" && (
           <>
+          <ChatAudioButton/>
           <ChatVideoButton/>
           </>
         )}

@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+  frontend:
+    # Uncomment the following line if you want to run a local instance of MongoDB
+    # depends_on:
+    #   - db
+    build:
+      context: .
+      dockerfile: Dockerfile
+    
+    # Do port mapping so that we can access the app from the browser
+    ports:
+      - 3000:3000
+    
+    # Define the environment variables
+    environment:
+      NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: pk_test_bWlnaHR5LWtyaWxsLTg0LmNsZXJrLmFjY291bnRzLmRldiQ
+      CLERK_SECRET_KEY: sk_test_NxIGpgoPuub2nzD3BzCyKng4pwfCfdjS3gVmQ9ExQX
+      NEXT_PUBLIC_CLERK_SIGN_IN_URL: /sign-in
+      NEXT_PUBLIC_CLERK_SIGN_UP_URL: /sign-up
+      NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL: /
+      NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL: /
+      DATABASE_URL: "postgresql://shuaibushehukalifa:qa1nScbMFme8@ep-sweet-sky-a741fhkd.ap-southeast-2.aws.neon.tech/discord-clone?sslmode=require&connection_timeout=10&pool_timeout=0"
+      UPLOADTHING_SECRET: sk_live_a9ac8c5710f6326255e47f7fe88ab636459e59a671216cfd2b838e4686d82c70
+      UPLOADTHING_APP_ID: mi4ejy37cx
+      LIVEKIT_API_KEY: API2EsCh72xqS3c
+      LIVEKIT_API_SECRET: nQdBbcakfU8ob86DnWhXp2tfOJU2cBCENR0oEre6TcFA
+      NEXT_PUBLIC_LIVEKIT_URL: wss://discord-clone-e00wui8k.livekit.cloudet/
+ 
+    
+volumes:
+  discord_clone_data:

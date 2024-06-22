@@ -16,6 +16,7 @@ interface MemberIdPageProps {
   },
   searchParams: {
     video?: boolean;
+    audio?: boolean;
   }
 
 }
@@ -56,7 +57,7 @@ export default async function MemberIdPage({
   const { memberOne, memberTwo } = conversation;
 
   const otherMember = memberOne.profileId === profile.id ? memberTwo : memberOne;
-
+console.log(searchParams.video, searchParams.audio);
 
   return (
     <div
@@ -68,14 +69,21 @@ export default async function MemberIdPage({
         serverId={params.serverId}
         type='conversation'
       />
-      {searchParams.video && (
+      {searchParams.video && !searchParams.audio && (
         <MediaRoom
         chaId={conversation.id}
         video={true}
         audio={true}
         />
       )}
-      {!searchParams.video && (
+      {searchParams.audio && !searchParams.video && (
+        <MediaRoom
+        chaId={conversation.id}
+        video={false}
+        audio={true}
+        />
+      )}
+      {!searchParams.video && !searchParams.audio && (
         <>
           <ChatMessages
             member={currentMember}

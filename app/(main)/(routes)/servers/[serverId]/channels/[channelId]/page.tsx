@@ -83,6 +83,13 @@ export default async function ChannelIdPage({
         audio={true} 
         />
        )}
+       {channel.type === ChannelType.AUDIO && (
+        <MediaRoom
+        chaId={channel.id}
+         video={false}
+        audio={true} 
+        />
+       )}
     </div>
   )
 }
